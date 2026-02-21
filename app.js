@@ -77,6 +77,34 @@ function submitOrder(){
     return;
   }
 
+  let total = 0;
+  let items = [];
+
+  for (const [id, qty] of cart.entries()){
+    const p = PRODUCTS.find(x => x.id === id);
+    total += p.price * qty;
+    items.push({
+      title: p.title,
+      qty: qty,
+      price: p.price
+    });
+  }
+
+  const payload = {
+    address,
+    total,
+    items
+  };
+
+  tg.sendData(JSON.stringify(payload));
+  tg.close();
+}
+  const address = document.getElementById("address").value.trim();
+  if (!address) {
+    tg.showAlert("Укажи адрес или самовывоз");
+    return;
+  }
+
   const payload = {
     address,
     items: Array.from(cart.entries())
